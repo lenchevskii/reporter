@@ -1,3 +1,5 @@
+{-# LANGUAGE NamedFieldPuns #-}
+
 module Database where
 
 import           Project       (Budget (Budget, budgetExpenditure, budgetIncome),
@@ -7,9 +9,9 @@ import           System.Random (getStdRandom, randomR)
 
 getBuget :: ProjectId -> IO Budget
 getBuget _ = do
-  income <- Money <$> getStdRandom (randomR (0, 10000))
-  expenditure <- Money <$> getStdRandom (randomR (0, 10000))
-  pure Budget {budgetIncome = income, budgetExpenditure = expenditure}
+  budgetIncome <- Money <$> getStdRandom (randomR (0, 10000))
+  budgetExpenditure <- Money <$> getStdRandom (randomR (0, 10000))
+  pure Budget {budgetIncome, budgetExpenditure}
 
 getTransactions :: ProjectId -> IO [Transaction]
 getTransactions _ = do
