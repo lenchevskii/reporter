@@ -1,0 +1,39 @@
+cabal-version:      3.6
+name:               reporter
+version:            0.1.0.0
+author:             Dzmitry L.
+maintainer:         dima.lenchevskii@gmail.com
+extra-source-files: CHANGELOG.md
+
+library
+  exposed-modules:
+    Database
+    Demo
+    Project
+    Reporting
+    PrettyPrint
+
+  build-depends:
+    , base        ^>=4.16.4.0
+    , containers
+    , random
+    , text
+
+  hs-source-dirs:   source
+  default-language: Haskell2010
+
+executable reporter
+  main-is:          Main.hs
+  build-depends:
+    , base      ^>=4.16.4.0
+    , reporter
+
+  hs-source-dirs:   app
+  default-language: Haskell2010
+
+-- test-suite reporter-tests
+--   default-language: Haskell2010
+--   type:             exitcode-stdio-1.0
+--   hs-source-dirs:   tests src
+--   main-is:          Spec.hs
+--   build-depends:    base ^>=4.16.4.0
