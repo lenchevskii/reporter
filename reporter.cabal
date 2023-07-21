@@ -9,13 +9,15 @@ library
   exposed-modules:
     Database
     Demo
+    PrettyPrint
     Project
     Reporting
-    PrettyPrint
 
   build-depends:
     , base        ^>=4.16.4.0
     , containers
+    , Decimal
+    , mtl
     , random
     , text
 

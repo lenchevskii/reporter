@@ -3,11 +3,12 @@
 
 module Project where
 
-import           Data.Text (Text)
+import           Data.Decimal (Decimal)
+import           Data.Text    (Text)
 
 newtype Money =
   Money
-    { unMoney :: Double
+    { unMoney :: Decimal
     }
   deriving (Show, Eq, Num)
 
@@ -17,9 +18,10 @@ newtype ProjectId =
     }
   deriving (Show, Eq, Num)
 
-data Project a
+-- | The field `g` is a slot for project group level reports.
+data Project g a
   = Project Text a
-  | ProjectGroup Text [Project a]
+  | ProjectGroup Text g [Project g a]
   deriving (Show, Eq, Functor, Foldable, Traversable)
 
 data Budget =

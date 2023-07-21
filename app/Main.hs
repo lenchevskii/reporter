@@ -11,8 +11,7 @@ import qualified Reporting   as R
 --
 main :: IO ()
 main = do
-  report <- R.calculateProjectReport project
-  putStrLn (prettyProject prettyReport report)
-  (putStrLn . prettyReport . R.accumulateProjectReport) report
+  report <- R.calculateProjectReports project
+  putStrLn (prettyProject prettyReport prettyReport report)
 --
 -- $> main

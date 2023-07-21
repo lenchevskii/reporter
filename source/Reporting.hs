@@ -1,11 +1,14 @@
-{-# LANGUAGE InstanceSigs #-}
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE InstanceSigs     #-}
 
 module Reporting where
 
-import           Data.Foldable (fold)
-import           Data.Monoid   (getSum)
-import qualified Database      as DB
-import qualified Project       as P
+import           Control.Monad.IO.Class (liftIO)
+import           Control.Monad.Writer   (MonadWriter (tell), listen, runWriterT)
+import           Data.Foldable          (fold)
+import           Data.Monoid            (getSum)
+import qualified Database               as DB
+import qualified Project                as P
 
 data Report =
   Report
@@ -43,9 +46,18 @@ calculateReport budget transactions =
 --     (Project p _) -> calculateReport <$> DB.getBuget p <*> DB.getTransactions p
 --     (ProjectGroup _ projects) -> foldMap calculateProjectReport projects
 --
-calculateProjectReport :: P.Project P.ProjectId -> IO (P.Project Report)
-calculateProjectReport =
-  traverse (\p -> calculateReport <$> DB.getBuget p <*> DB.getTransactions p)
-
-accumulateProjectReport :: P.Project Report -> Report
-accumulateProjectReport = fold
+calculateProjectReports ::
+     P.Project g P.ProjectId -> IO (P.Project Report Report)
+calculateProjectReports project = fst <$> runWriterT (calc project)
+  where
+    calc (P.Project name p) = do
+      report <-
+        liftIO (calculateReport <$> DB.getBuget p <*> DB.getTransactions p)
+      tell report
+      pure (P.Project name report)
+    calc (P.ProjectGroup name _ projects) = do
+      (projects', report) <- listen (mapM calc projects)
+      pure (P.ProjectGroup name report projects')
+--
+-- There is no need for the `accumulateProjectReport` function,
+-- because `calculateProjectReport` returns Reports on all levels.
