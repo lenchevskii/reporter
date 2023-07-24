@@ -3,22 +3,21 @@
 module Database where
 
 import           Data.Decimal  (realFracToDecimal)
-import           Project       (Budget (Budget, budgetExpenditure, budgetIncome),
-                                Money (Money), ProjectId,
-                                Transaction (Purchase, Sale))
+import qualified Project       as P
 import           System.Random (getStdRandom, randomR)
 
-randomMoney :: (Double, Double) -> IO Money
-randomMoney range = Money . realFracToDecimal 2 <$> getStdRandom (randomR range)
+randomMoney :: (Double, Double) -> IO P.Money
+randomMoney range =
+  P.Money . realFracToDecimal 2 <$> getStdRandom (randomR range)
 
-getBuget :: ProjectId -> IO Budget
+getBuget :: P.ProjectId -> IO P.Budget
 getBuget _ = do
   budgetIncome <- randomMoney (0, 10000)
   budgetExpenditure <- randomMoney (0, 10000)
-  pure Budget {budgetIncome, budgetExpenditure}
+  pure P.Budget {P.budgetIncome, P.budgetExpenditure}
 
-getTransactions :: ProjectId -> IO [Transaction]
+getTransactions :: P.ProjectId -> IO [P.Transaction]
 getTransactions _ = do
-  sale <- Sale <$> randomMoney (0, 10000)
-  purechase <- Purchase <$> randomMoney (0, 10000)
+  sale <- P.Sale <$> randomMoney (0, 10000)
+  purechase <- P.Purchase <$> randomMoney (0, 10000)
   pure [sale, purechase]

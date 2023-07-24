@@ -1,17 +1,18 @@
 module Main where
 
-import           Demo        (project)
-import           PrettyPrint (prettyProject, prettyReport)
-import qualified Reporting   as R
+import           Demo        (_project)
+import           PrettyPrint (prettyResult)
+import           Reporting   (calculateProjectReports)
 
 -- main :: IO ()
 -- main = do
 --   report <- calculateProjectReport project
 --   putStrLn (prettyReport report)
 --
+-- | FIXME: add drawTreeWith fnc, fix reports types error
 main :: IO ()
 main = do
-  report <- R.calculateProjectReports project
-  putStrLn (prettyProject prettyReport prettyReport report)
+  reports <- calculateProjectReports _project
+  drawTreeWith (prettyResult reports)
 --
 -- $> main

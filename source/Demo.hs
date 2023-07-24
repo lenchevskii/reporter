@@ -2,13 +2,13 @@
 
 module Demo where
 
-import           Project (Project (Project, ProjectGroup), ProjectId)
+import           Project (Project, project, projectGroup)
 
-project :: Project () ProjectId
-project = ProjectGroup "Sweden" () [stockholm, gothenburg, malmo]
+_project :: Project
+_project = projectGroup "Sweden" [stockholm, gothenburg, malmo]
   where
-    stockholm = Project "Stockholm" 1
-    gothenburg = Project "Gothenburg" 2
-    malmo = ProjectGroup "Malmo" () [city, limhamn]
-    city = Project "Malmo City" 3
-    limhamn = Project "Limhamn" 4
+    stockholm = project 1 "Stockholm"
+    gothenburg = project 2 "Gothenburg"
+    malmo = projectGroup "Malmo" [city, limhamn]
+    city = project 3 "Malmo City"
+    limhamn = project 4 "Limhamn"
